@@ -3,14 +3,17 @@
 PORT=15858
 RPCPORT=15959
 CONF_DIR=~/.delion
+SNAPSHOT_DIR=~/snapshot
 
 cd ~
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
-if [[ $(lsb_release -d) != *16.04* ]]; then
-  echo -e "${RED}You are not running Ubuntu 16.04. Installation is cancelled.${NC}"
-  exit 1
+if [[ $(lsb_release -d) = *16.04* ]]; then
+  COINZIP='https://github.com/delioncoin/delioncore/releases/download/v1.1/ubuntu16-1.1.zip'
+fi
+if [[ $(lsb_release -d) != *18.04* ]]; then
+  COINZIP='https://github.com/delioncoin/delioncore/releases/download/v1.1/ubuntu18-1.1.zip'
 fi
 if [[ $EUID -ne 0 ]]; then
    echo -e "${RED}$0 must be run as root.${NC}"
@@ -27,8 +30,8 @@ User=root
 Group=root
 Type=forking
 #PIDFile=/root/.delion/deliond.pid
-ExecStart=/root/delion/deliond
-ExecStop=-/root/delion/delion-cli stop
+ExecStart=/usr/local/bin/deliond
+ExecStop=-/usr/local/bin/delion-cli stop
 Restart=always
 PrivateTmp=true
 TimeoutStopSec=60s
@@ -69,13 +72,20 @@ then
   sudo echo "/var/swap.img none swap sw 0 0" >> /etc/fstab
   cd
   
-  wget https://github.com/delioncoin/delioncore/releases/download/v1.0/Linux.zip
-  unzip Linux.zip
+  wget $COINZIP
+  unzip *.zip
   chmod +x delion*
   rm delion-qt delion-tx Linux.zip
   sudo cp delion* /usr/local/bin
   mkdir -p delion
   sudo mv delion-cli deliond /root/delion
+  
+  mkdir -p $SNAPSHOT_DIR
+  cd $SNAPSHOT_DIR
+  wget http://cdn.delion.online/snapshot.zip
+  unzip snapshot.zip
+  rm snapshot.zip
+
 fi
 
  IP=$(curl -s4 api.ipify.org)
@@ -95,7 +105,7 @@ fi
   echo "server=1" >> delion.conf_TEMP
   echo "daemon=1" >> delion.conf_TEMP
   echo "logtimestamps=1" >> delion.conf_TEMP
-  echo "maxconnections=100" >> delion.conf_TEMP
+  echo "maxconnections=250" >> delion.conf_TEMP
   echo "masternode=1" >> delion.conf_TEMP
   echo "dbcache=20" >> delion.conf_TEMP
   echo "maxorphantx=5" >> delion.conf_TEMP
@@ -108,6 +118,9 @@ fi
   mv delion.conf_TEMP $CONF_DIR/delion.conf
   echo ""
   echo -e "Your ip is ${GREEN}$IP:$PORT${NC}"
+
+  ## copy snapshot
+  cp $SNAPSHOT_DIR/* $CONF_DIR
 	## Config Systemctl
 	configure_systemd
   
