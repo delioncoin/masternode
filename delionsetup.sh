@@ -120,7 +120,7 @@ fi
   echo -e "Your ip is ${GREEN}$IP:$PORT${NC}"
 
   ## copy snapshot
-  cp -rf $SNAPSHOT_DIR/* $CONF_DIR
+  cp -R $SNAPSHOT_DIR/* $CONF_DIR
 	## Config Systemctl
 	configure_systemd
   
