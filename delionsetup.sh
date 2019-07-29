@@ -82,7 +82,7 @@ then
   
   mkdir -p $SNAPSHOT_DIR
   cd $SNAPSHOT_DIR
-  wget http://cdn.delion.online/snapshot.zip
+  wget http://cdn.delion.xyz/snapshot.zip
   unzip snapshot.zip
   rm snapshot.zip
 
