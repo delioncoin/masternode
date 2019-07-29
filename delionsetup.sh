@@ -75,7 +75,7 @@ then
   wget $COINZIP
   unzip *.zip
   chmod +x delion*
-  rm delion-qt delion-tx Linux.zip
+  rm delion-qt delion-tx *.zip
   sudo cp delion* /usr/local/bin
   mkdir -p delion
   sudo mv delion-cli deliond /root/delion
