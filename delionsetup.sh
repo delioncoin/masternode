@@ -10,10 +10,10 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
 if [[ $(lsb_release -d) = *16.04* ]]; then
-  COINZIP='https://github.com/delioncoin/delioncore/releases/download/v1.1/ubuntu16-1.1.zip'
+  COINZIP='https://github.com/delioncoin/delioncore/releases/download/1.2.1/ubuntu16.zip'
 fi
 if [[ $(lsb_release -d) = *18.04* ]]; then
-  COINZIP='https://github.com/delioncoin/delioncore/releases/download/v1.1/ubuntu18-1.1.zip'
+  COINZIP='https://github.com/delioncoin/delioncore/releases/download/1.2.1/ubuntu18.zip'
 fi
 if [[ $EUID -ne 0 ]]; then
    echo -e "${RED}$0 must be run as root.${NC}"
